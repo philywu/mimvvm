@@ -11,7 +11,7 @@ import { I18n } from "./i18n.js";
     app: global vairable of app page
     */
     var app = {        
-        page: new Page()
+        page: null
     };
     // check service worker
     if ('serviceWorker' in navigator) {
@@ -32,12 +32,10 @@ import { I18n } from "./i18n.js";
      */
     app.init = function (pageName) {
 
-        app.page.load(pageName).then(pageConfig => {
-            if (pageConfig) {
-                app.render(pageConfig);
-               // app.render(pageConfig,{"i18n":{locale: 'fr-CA', defaultCurrency: 'CAD', messageBundleName: "messageBundle_fr"}});
-            }
-        });
+       app.page = new Page();
+       let pageConfig = app.page.load(pageName)
+       app.render(pageConfig);
+        
 
     }
 
@@ -99,7 +97,7 @@ import { I18n } from "./i18n.js";
      */
     app.renderMain = async function (config, param) {
         let mainDiv = document.querySelector('#pageMain');
-        let html = await this.page.getPageFile(config.name);
+        let html = await this.page.generateView(config.name);
         mainDiv.innerHTML = html;
         // if (param && param.i18n){
         //     let i18n = I18n.use(param.i18n);

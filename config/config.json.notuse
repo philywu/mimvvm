@@ -1,0 +1,20 @@
+  {
+    "version":"1.0",
+    "pages":[        
+        {
+            "name":"template_main",
+            "header":{
+                "title": "Template",
+                "isHome":true,
+                "isBack":false
+                
+            },
+            "main":{             
+            },
+            "bottom":{
+
+            }
+        }           
+
+    ]
+}

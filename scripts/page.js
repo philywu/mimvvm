@@ -1,3 +1,7 @@
+import CONFIG from "../config/app_config.js";
+import {
+    ViewModel
+} from "../viewmodel/view_model.js";
 var _CONFIG_FILE_PATH = "../config/config.json";
 var _PAGE_FILE_EXT = ".page.html";
 var _PRINT_FILE_EXT = ".print.html";
@@ -13,12 +17,12 @@ const _FETCH_ARGS = {
  * page control class
  */
 class Page {
-    constructor () {       
+    constructor (pageName) {       
+        this.pageName = pageName;
         this.currentPageConfig = {};
-        this.historyPageConfigStack = [];
-
-        this.config = null;
-        
+        this.historyPageConfigStack = [];        
+        this.config = CONFIG;
+        this.viewModel = null;
     }
     /**
      * get page configuration by pageName.
@@ -71,17 +75,27 @@ class Page {
     /**
      * load page 
      * @param {string} pageName 
+     * 
      */
-    async load(pageName) {             
-        if (!this.config){
-            this.config = await this.getConfigFromJson();
-        }
+    load(pageName) {             
+        // if (!this.config){
+        //     this.config = await this.getConfigFromJson();
+        // }
+        this.config = CONFIG;
         if (!pageName) {
            pageName = this.getHomePageName();
         } 
         return this.getPageConfig(pageName);
     }
     /**
+     * get view file content
+     * @param {string} viewName 
+     */
+    async generateView(viewName){
+       let pageHTML = await this.getPageFile(viewName);
+       return pageHTML;
+    }
+     /**
      * get view file content
      * @param {string} viewName 
      */
@@ -107,6 +121,7 @@ class Page {
     }
     /**
      * get config from Json
+     * Obsoleted 
      */
     async getConfigFromJson() {
         if (!this.config) {
