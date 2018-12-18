@@ -11,4 +11,10 @@
       </li>
       
   </ul>
+  <div>
+    test here ${vm.name}
+    <ul>
+      ${vm.list.map(item =>`<li>${item.name}</li>`).join('')}      
+    </ul>     
+  </div>
 </div>

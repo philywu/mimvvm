@@ -101,7 +101,9 @@ class Page {
      */
     async generateView(viewName){
        let pageHTML = await this.getPageFile(viewName);
-       return pageHTML;
+       
+       let parsedHTML = this.parseHTML(pageHTML);
+       return parsedHTML;
     }
      /**
      * get view file content
@@ -116,6 +118,11 @@ class Page {
         } catch(err) {
             return null; 
         }
+    }
+    parseHTML(html){
+        let vm= this.viewModel.vmData;
+        let tl = eval("`"+html+"`");
+        return tl ;
     }
     async getPrintFile(viewName){
         const fileName = _VIEW_FILE_PATH+viewName+_PRINT_FILE_EXT; 
