@@ -17,12 +17,11 @@ const _FETCH_ARGS = {
  * page control class
  */
 class Page {
-    constructor (pageName) {       
-        this.pageName = pageName;
+    constructor () {       
         this.currentPageConfig = {};
         this.historyPageConfigStack = [];        
         this.config = CONFIG;
-        this.viewModel = null;
+        this.viewModel = new ViewModel();
     }
     /**
      * get page configuration by pageName.
@@ -31,14 +30,16 @@ class Page {
      */
     getPageConfig(pageName) {
         if (this.config){
-            const pages = this.config.pages;
-            let pageConfig = pages.filter(el => {                
-                return (el.name == pageName)
-                });
+            // const pages = this.config.pages;
+            // let pageConfig = pages.filter(el => {                
+            //     return (el.name == pageName)
+            //     });
         
            // pageConfig[0].controllerInstance = ControllerFactory.getInstance(pageConfig[0].controller);
-            this.currentPageConfig = pageConfig[0] ; 
-            return pageConfig[0];
+            this.currentPageConfig = this.config.pages[pageName] ; 
+            //set page name with Key
+            this.currentPageConfig.pageName = pageName;
+            return this.currentPageConfig ;
         } 
     }
     /**
@@ -47,11 +48,17 @@ class Page {
     getHomePageName() {
         if (this.config){
             const pages = this.config.pages;
-            let homePage = pages.filter(el => {                
-                return (el.header.isHome)
-                });
-                    
-            return homePage[0].name;
+            let homePageName = null;
+            for (let pageName in pages){                    
+                let page = pages[pageName];
+                let isHome = page.header.isHome
+                if (isHome){
+                    homePageName = pageName;
+                    break;
+                }
+                
+            }              
+            return homePageName;
         } 
     }
     
@@ -85,6 +92,7 @@ class Page {
         if (!pageName) {
            pageName = this.getHomePageName();
         } 
+        this.viewModel.load(pageName);
         return this.getPageConfig(pageName);
     }
     /**

@@ -1,8 +1,7 @@
 export default {
     "version":"1.0",
-    "pages":[        
-        {
-            "name":"template_main",
+    "pages":        
+        {"template_main":{            
             "header":{
                 "title": "Template",
                 "isHome":true,
@@ -14,7 +13,8 @@ export default {
             "bottom":{
 
             }
-        }           
+        }
+    }        
 
-    ]
+    
 }
