@@ -2,6 +2,9 @@ import CONFIG from "../config/app_config.js";
 import {
     ViewModel
 } from "../viewmodel/view_model.js";
+
+import {EventListenerProvider} from "../viewmodel/event_listener.js";
+
 var _CONFIG_FILE_PATH = "../config/config.json";
 var _PAGE_FILE_EXT = ".page.html";
 var _PRINT_FILE_EXT = ".print.html";
@@ -22,6 +25,8 @@ class Page {
         this.historyPageConfigStack = [];        
         this.config = CONFIG;
         this.viewModel = new ViewModel();
+        this.eventListener = null;
+        
     }
     /**
      * get page configuration by pageName.
@@ -80,11 +85,11 @@ class Page {
         }
     }
     /**
-     * load page 
+     * intial load page 
      * @param {string} pageName 
      * 
      */
-    load(pageName) {             
+    init(pageName) {             
         // if (!this.config){
         //     this.config = await this.getConfigFromJson();
         // }
@@ -92,18 +97,23 @@ class Page {
         if (!pageName) {
            pageName = this.getHomePageName();
         } 
-        this.viewModel.load(pageName);
+        this.viewModel.init(pageName);
+        this.eventListener = EventListenerProvider.getInstance(pageName);  
+        this.eventListener.init(this.viewModel);    
+        console.log(this.viewModel.vmData);  
         return this.getPageConfig(pageName);
     }
     /**
      * get view file content
      * @param {string} viewName 
      */
-    async generateView(viewName){
-       let pageHTML = await this.getPageFile(viewName);
+    async generateView(mainDiv,viewName){
+       let pageHTML = await this.getPageFile(viewName);        
        
-       let parsedHTML = this.parseHTML(pageHTML);
-       return parsedHTML;
+       let parsedHTML = this.parseHTML(pageHTML);       
+       mainDiv.innerHTML = parsedHTML;
+       this.eventListener.registerEvent(mainDiv);
+
     }
      /**
      * get view file content
@@ -121,6 +131,7 @@ class Page {
     }
     parseHTML(html){
         let vm= this.viewModel.vmData;
+        
         let tl = eval("`"+html+"`");
         return tl ;
     }
