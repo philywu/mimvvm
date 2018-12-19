@@ -32,12 +32,9 @@ import { I18n } from "./i18n.js";
      */
     app.init = function (pageName) {
 
-        app.page.load(pageName).then(pageConfig => {
-            if (pageConfig) {
-                app.render(pageConfig);
-               // app.render(pageConfig,{"i18n":{locale: 'fr-CA', defaultCurrency: 'CAD', messageBundleName: "messageBundle_fr"}});
-            }
-        });
+       let pageConfig = app.page.init(pageName)
+       app.render(pageConfig);
+        
 
     }
 
@@ -99,8 +96,8 @@ import { I18n } from "./i18n.js";
      */
     app.renderMain = async function (config, param) {
         let mainDiv = document.querySelector('#pageMain');
-        let html = await this.page.getPageFile(config.name);
-        mainDiv.innerHTML = html;
+        let html = await this.page.generateView(mainDiv,config.pageName);
+        //mainDiv.innerHTML = html;
         // if (param && param.i18n){
         //     let i18n = I18n.use(param.i18n);
         //     let loaded = await i18n.loadMessageBuldle();

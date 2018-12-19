@@ -1,3 +1,10 @@
+import CONFIG from "../config/app_config.js";
+import {
+    ViewModel
+} from "../viewmodel/view_model.js";
+
+import {EventListenerProvider} from "../viewmodel/event_listener.js";
+
 var _CONFIG_FILE_PATH = "../config/config.json";
 var _PAGE_FILE_EXT = ".page.html";
 var _PRINT_FILE_EXT = ".print.html";
@@ -15,9 +22,10 @@ const _FETCH_ARGS = {
 class Page {
     constructor () {       
         this.currentPageConfig = {};
-        this.historyPageConfigStack = [];
-
-        this.config = null;
+        this.historyPageConfigStack = [];        
+        this.config = CONFIG;
+        this.viewModel = new ViewModel();
+        this.eventListener = null;
         
     }
     /**
@@ -27,14 +35,16 @@ class Page {
      */
     getPageConfig(pageName) {
         if (this.config){
-            const pages = this.config.pages;
-            let pageConfig = pages.filter(el => {                
-                return (el.name == pageName)
-                });
+            // const pages = this.config.pages;
+            // let pageConfig = pages.filter(el => {                
+            //     return (el.name == pageName)
+            //     });
         
            // pageConfig[0].controllerInstance = ControllerFactory.getInstance(pageConfig[0].controller);
-            this.currentPageConfig = pageConfig[0] ; 
-            return pageConfig[0];
+            this.currentPageConfig = this.config.pages[pageName] ; 
+            //set page name with Key
+            this.currentPageConfig.pageName = pageName;
+            return this.currentPageConfig ;
         } 
     }
     /**
@@ -43,11 +53,17 @@ class Page {
     getHomePageName() {
         if (this.config){
             const pages = this.config.pages;
-            let homePage = pages.filter(el => {                
-                return (el.header.isHome)
-                });
-                    
-            return homePage[0].name;
+            let homePageName = null;
+            for (let pageName in pages){                    
+                let page = pages[pageName];
+                let isHome = page.header.isHome
+                if (isHome){
+                    homePageName = pageName;
+                    break;
+                }
+                
+            }              
+            return homePageName;
         } 
     }
     
@@ -69,19 +85,37 @@ class Page {
         }
     }
     /**
-     * load page 
+     * intial load page 
      * @param {string} pageName 
+     * 
      */
-    async load(pageName) {             
-        if (!this.config){
-            this.config = await this.getConfigFromJson();
-        }
+    init(pageName) {             
+        // if (!this.config){
+        //     this.config = await this.getConfigFromJson();
+        // }
+        this.config = CONFIG;
         if (!pageName) {
            pageName = this.getHomePageName();
         } 
+        this.viewModel.init(pageName);
+        this.eventListener = EventListenerProvider.getInstance(pageName);  
+        this.eventListener.init(this.viewModel);    
+        console.log(this.viewModel.vmData);  
         return this.getPageConfig(pageName);
     }
     /**
+     * get view file content
+     * @param {string} viewName 
+     */
+    async generateView(mainDiv,viewName){
+       let pageHTML = await this.getPageFile(viewName);        
+       
+       let parsedHTML = this.parseHTML(pageHTML);       
+       mainDiv.innerHTML = parsedHTML;
+       this.eventListener.registerEvent(mainDiv);
+
+    }
+     /**
      * get view file content
      * @param {string} viewName 
      */
@@ -95,6 +129,12 @@ class Page {
             return null; 
         }
     }
+    parseHTML(html){
+        let vm= this.viewModel.vmData;
+        
+        let tl = eval("`"+html+"`");
+        return tl ;
+    }
     async getPrintFile(viewName){
         const fileName = _VIEW_FILE_PATH+viewName+_PRINT_FILE_EXT; 
        
@@ -107,6 +147,7 @@ class Page {
     }
     /**
      * get config from Json
+     * Obsoleted 
      */
     async getConfigFromJson() {
         if (!this.config) {
