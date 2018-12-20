@@ -21,6 +21,7 @@ class TemplateMainListener extends BaseEventListener {
         super.registerEvent(rootDiv);
         // put special logic here
         //example:
+        this.vm.name = "Rachel";
         let btn = rootDiv.querySelector("#clkMe");
         btn.addEventListener("click",evt =>{
             console.log("clicked me");

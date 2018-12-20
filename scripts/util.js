@@ -84,6 +84,28 @@ class Util {
         }
         return outputArray;
       }
+
+
+      static checkType(val){
+          if (val==null){
+              return val;
+          }
+          let type = typeof val;
+          if ( type=="object"){
+            switch (val.constructor) {
+                case Object : 
+                    return "object";
+                    
+                
+                case Array : 
+                    return "Array";
+                    break;
+                
+            }
+          } else {
+              return type;
+          }
+      }
       
 }
 class RemoteUtil {

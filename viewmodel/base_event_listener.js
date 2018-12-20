@@ -24,7 +24,6 @@ class BaseEventListener {
                    let functionName = source.getAttribute(eventOn);
                    // remove the prefix "ls:" of function name 
                    let newFunctionName = functionName.slice(this.eventPreFix.length);
-                   console.log(newFunctionName);
                    source[eventOn] = this[newFunctionName];
                    
                }

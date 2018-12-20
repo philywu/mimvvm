@@ -100,7 +100,7 @@ class Page {
         this.viewModel.init(pageName);
         this.eventListener = EventListenerProvider.getInstance(pageName);  
         this.eventListener.init(this.viewModel);    
-        console.log(this.viewModel.vmData);  
+       // console.log(this.viewModel.vmData);  
         return this.getPageConfig(pageName);
     }
     /**
@@ -109,7 +109,9 @@ class Page {
      */
     async generateView(mainDiv,viewName){
        let pageHTML = await this.getPageFile(viewName);        
-       
+       this.viewModel.vmData.name ="Rita";
+       //this.viewModel.vmData.list[0].name = "Austrilia";
+       //this.viewModel.vmData.list.push({"name":"japan"});
        let parsedHTML = this.parseHTML(pageHTML);       
        mainDiv.innerHTML = parsedHTML;
        this.eventListener.registerEvent(mainDiv);
@@ -130,8 +132,7 @@ class Page {
         }
     }
     parseHTML(html){
-        let vm= this.viewModel.vmData;
-        
+        let vm= this.viewModel.data;        
         let tl = eval("`"+html+"`");
         return tl ;
     }

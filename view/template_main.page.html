@@ -12,7 +12,8 @@
       
   </ul>
   <div>
-    test here ${vm.name}
+    Hello ${vm.name} 
+    <div>Today weather: ${vm.weather.today}</div>
     <ul>
       ${vm.list.map(item =>`<li>${item.name}</li>`).join('')}      
     </ul>     
