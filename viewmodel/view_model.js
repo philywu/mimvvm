@@ -100,11 +100,13 @@ class BoundModel {
           }
         });
 
+
     
         return proxy ;
       }
+
       updateVMNode(name,value){
-           // console.log("updateVMNode",name,value,this.vmNodes);
+           //console.log("updateVMNode",name,value,this.vmNodes);
             let updateVMList = this.vmNodes.filter(item =>{                
                 let key = "{{"+name+"}}";                
                 return item.variableKeys.includes(key);
@@ -169,6 +171,7 @@ class ViewModel {
        this.vmNodes  = this.scanComponent(div);
 
        this.model = new BoundModel (this.data,this.vmNodes);
+       
     
     }
     scanComponent(div){

@@ -98,7 +98,7 @@ class Util {
                     
                 
                 case Array : 
-                    return "Array";
+                    return "array";
                     break;
                 
             }

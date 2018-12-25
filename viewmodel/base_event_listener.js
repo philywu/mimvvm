@@ -1,3 +1,4 @@
+import {Util} from "../scripts/util.js";
 class BaseEventListener {
     constructor(args){
         this.vm = null;    
@@ -8,6 +9,27 @@ class BaseEventListener {
     }
     init (vm){
         this.vm = vm; 
+    }
+    /**
+     * load data inform
+     * @param {boolean} isIntial if it is a intial load
+     */
+    load(data){
+        // this.vm.model.name = "Phily";
+        this.loadDeep(data);
+        
+    }
+    loadDeep(data){
+     //   let keys = Object.keys(data);
+     let keys = Object.keys(data);
+        for (let key of keys){
+            let valType = Util.checkType(data[key]);
+            if (valType!="object" && valType !="array"){
+                console.log(valType,key,data[key]);
+                let val = data[key];
+                data[key] = val;
+            }
+        }
     }
     /**
      * set the events from html page, which start with ls: 

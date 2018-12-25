@@ -13,15 +13,17 @@ class TemplateMainListener extends BaseEventListener {
         // this["test"].apply(null,null);
         
     }
-    test (evt) {
-
-        console.log("test",evt);
+    /**
+     * initial page with vm value
+     */
+    load(isIntial){
+        super.load(this.vm.model);
     }
     registerEvent(rootDiv){
         super.registerEvent(rootDiv);
         // put special logic here
         //example:
-        this.vm.name = "Rachel";
+       // this.vm.model.name  = "Chloe";
         let btn = rootDiv.querySelector("#clkMe");
         btn.addEventListener("click",evt =>{
             console.log("clicked me");

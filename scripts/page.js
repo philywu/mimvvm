@@ -116,9 +116,8 @@ class Page {
        
        let a = await this.viewModel.scanPage(mainDiv,pageHTML);
        //this.viewModel.model.name = "Rachel";
+       this.eventListener.load(true);
        this.eventListener.registerEvent(mainDiv);
-       this.viewModel.model.name = "Rita";
-      // this.viewModel.model.name = "Rachel";
        console.log(this.viewModel.vmNodes)
     }
      /**
