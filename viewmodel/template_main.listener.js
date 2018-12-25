@@ -17,6 +17,11 @@ class TemplateMainListener extends BaseEventListener {
      * initial page with vm value
      */
     load(isIntial){
+        //this.vm.model.name="Ria";
+       // this.vm.model.weather = {"today":"rain"};
+     //  this.vm.model.weather["today"] = "rain";
+     this.vm.model.weather.today = "rain";
+        //console.log(this.vm.model);
         super.load(this.vm.model);
     }
     registerEvent(rootDiv){

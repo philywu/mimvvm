@@ -10,7 +10,8 @@ export default {
                     {
                         "name": "New Zeland"
                     }
-                ]
+                ],
+                "inside":"outside "
             }
         }
     }

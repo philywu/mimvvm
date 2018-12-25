@@ -24,11 +24,18 @@ class BaseEventListener {
      let keys = Object.keys(data);
         for (let key of keys){
             let valType = Util.checkType(data[key]);
-            if (valType!="object" && valType !="array"){
-                console.log(valType,key,data[key]);
+            switch (valType){
+                case "object":
+                    this.loadDeep(data[key]);
+                    break;
+                case "array":
+                break;
+
+                default:
                 let val = data[key];
                 data[key] = val;
             }
+           
         }
     }
     /**

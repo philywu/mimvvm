@@ -29,10 +29,16 @@ class VMNode {
     }
   
     update (name,value) {
-      console.log("update",name,value);
+     // console.log("update",name,value);
+      let options = null;
       let key = "{{"+name+"}}"; 
       for (let nodeText of this.nodeTextList){
-        let temp_template = nodeText.template.slice(0)
+        let temp_template = nodeText.template.slice(0);
+        // nodeText.textContent = temp_template.replace(/\{\{\s?([\w.]+)\s?\}\}/g, (match, variable) => {
+        //     return variable.split('.').reduce((previous, current) => {
+        //       return previous[current];
+        //     }, options) || ''
+        //   })
         nodeText.textContent = temp_template.replace(key,(match,variable) =>{
             return value ; 
         });
@@ -77,6 +83,25 @@ class BoundModel {
     
     constructor (data,vmNodes) {
         const callbacks = [];
+        var handler =  {
+            get(target, key) {
+                  if (Util.checkType(target[key]) === 'object' && target[key] !== null) {
+                    return new Proxy(target[key], handler)
+                  } else {
+                    return target[key];
+                  }
+                },
+            set: function (target, property, value) {
+              console.log("set");
+              console.log(target,property,value);
+              target[property] = value;
+              //this.updateVMNode(property,value)
+              
+              updateVM(property,value);
+              //callbacks.forEach((callback) => callback())
+              return true;
+            }
+          }
         this.data = data ; 
         this.vmNodes = vmNodes;
         // data.push({
@@ -87,18 +112,8 @@ class BoundModel {
         this.updateVMNode = this.updateVMNode.bind(this);
         
         let updateVM = this.updateVMNode ; 
-    
-        const proxy = new Proxy(data, {
-          set: function (target, property, value) {
-            console.log("set");
-            target[property] = value;
-            //this.updateVMNode(property,value)
-            
-            updateVM(property,value);
-            //callbacks.forEach((callback) => callback())
-            return true;
-          }
-        });
+        
+        const proxy = new Proxy(data, handler);
 
 
     
