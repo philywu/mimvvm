@@ -61,7 +61,10 @@ hello
     <div>abc</div>
     <div>123</div>
   </output>
-
+  <div>Today weather: ${vm.weather.today}</div>
+    <ul>
+      ${vm.list.map(item =>`<li>${item.name}</li>`).join('')}      
+    </ul>     
   
   <!-- <footer class="container footer bg-light ">    
   </footer> -->

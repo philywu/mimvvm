@@ -109,13 +109,17 @@ class Page {
      */
     async generateView(mainDiv,viewName){
        let pageHTML = await this.getPageFile(viewName);        
-       this.viewModel.vmData.name ="Rita";
+      // this.viewModel.vmData.name ="Rita";
        //this.viewModel.vmData.list[0].name = "Austrilia";
        //this.viewModel.vmData.list.push({"name":"japan"});
-       let parsedHTML = this.parseHTML(pageHTML);       
-       mainDiv.innerHTML = parsedHTML;
+       //let parsedHTML = this.parseHTML(pageHTML);       
+       
+       let a = await this.viewModel.scanPage(mainDiv,pageHTML);
+       //this.viewModel.model.name = "Rachel";
        this.eventListener.registerEvent(mainDiv);
-
+       this.viewModel.model.name = "Rita";
+      // this.viewModel.model.name = "Rachel";
+       console.log(this.viewModel.vmNodes)
     }
      /**
      * get view file content
@@ -131,11 +135,11 @@ class Page {
             return null; 
         }
     }
-    parseHTML(html){
-        let vm= this.viewModel.data;        
-        let tl = eval("`"+html+"`");
-        return tl ;
-    }
+    // parseHTML(html){
+    //     let vm= this.viewModel.data;        
+    //     let tl = eval("`"+html+"`");
+    //     return tl ;
+    // }
     async getPrintFile(viewName){
         const fileName = _VIEW_FILE_PATH+viewName+_PRINT_FILE_EXT; 
        

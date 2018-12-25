@@ -12,13 +12,18 @@
       
   </ul>
   <div>
-    Hello ${vm.name} 
-    <div>Today weather: ${vm.weather.today}</div>
-    <ul>
-      ${vm.list.map(item =>`<li>${item.name}</li>`).join('')}      
-    </ul>     
+    Hello {{name}}
+    this is a {{Test}}
+    
   </div>
- <input type="text" value="10" onchange="ls:test">
+  <div>
+    this is another {{name}}
+    <div id="testId">
+      {{inside}}something 
+    </div>
+    then it is {{test2}}
+  </div>
+ <input type="text" value="{{value}}" onchange="ls:test">
   <button onclick="ls:test">click </button>
   <button id="clkMe" >Click me</button>
 </div>
