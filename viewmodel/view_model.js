@@ -85,15 +85,16 @@ class BoundModel {
         const callbacks = [];
         var handler =  {
             get(target, key) {
-                  if (Util.checkType(target[key]) === 'object' && target[key] !== null) {
-                    return new Proxy(target[key], handler)
-                  } else {
-                    return target[key];
-                  }
+                //   if (Util.checkType(target[key]) === 'object' && target[key] !== null) {
+                //     return new Proxy(target[key], handler)
+                //   } else {
+                //     return target[key];
+                //   }
+                console.log(target,key);
                 },
             set: function (target, property, value) {
               console.log("set");
-              console.log(target,property,value);
+            //  console.log(target,property,value);
               target[property] = value;
               //this.updateVMNode(property,value)
               
